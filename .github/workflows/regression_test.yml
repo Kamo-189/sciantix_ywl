@@ -42,4 +42,5 @@ jobs:
       - name: Run tests
         run: |
           source venv/bin/activate
-          python ./regression/regression.py 
+          cd regression
+          python ./regression.py 
