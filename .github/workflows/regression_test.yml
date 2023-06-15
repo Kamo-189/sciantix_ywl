@@ -27,7 +27,7 @@ jobs:
           pip install virtualenv
           virtualenv venv
           source venv/bin/activate
-          pip install numpy matplotlib scipy
+          pip install numpy matplotlib scipy scikit-learn
 
       - name: Build
         run: |
