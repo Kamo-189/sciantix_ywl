@@ -44,9 +44,8 @@ def main():
     # (each test is executed with sciantix, and no modifications of gold)
     if os.environ.get('GITHUB_ACTIONS') == 'true':
         # Default values
-
         mode_gold = 0
-        mode_plot = 1
+        mode_plot = 0
         mode_Baker = 1
         mode_White = 1
         mode_Talip = 1
