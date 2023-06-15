@@ -37,6 +37,7 @@ jobs:
           cd bin
           echo "in bin"
           ls
+          
 
       - name: Run tests
         run: |

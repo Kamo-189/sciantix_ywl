@@ -22,8 +22,8 @@ from regression_oxidation import regression_oxidation
 " ------------------- Main part -------------------"
 def main():
 
-    print(os.listdir('..'))
-    shutil.copy("../bin/sciantix.x", os.getcwd())
+    print(os.listdir('.'))
+    shutil.copy("./bin/sciantix.x", os.getcwd())
 
     # Stocking the directory path of the current file
     wpath = os.path.dirname(os.path.realpath(__file__))
