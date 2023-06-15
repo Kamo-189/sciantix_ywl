@@ -15,7 +15,7 @@ from regression_functions import *
 
 """ Helium release and release rate measurements  from Talip et al. (2014) measurements """
 def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed):
-  if mode_Talip == '0':
+  if mode_Talip == 0:
     return folderList, number_of_tests, number_of_tests_failed
 
   else:
@@ -27,14 +27,14 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
         print(f"Now in folder {file}...")
         number_of_tests += 1
 
-        if mode_gold == '0' or mode_gold == '1':
+        if mode_gold == 0 or mode_gold == 1:
 
           # copying and executing sciantix.exe into cwd
-          shutil.copy("..\sciantix.exe", os.getcwd())
-          os.system("sciantix.exe")
+          shutil.copy("../sciantix.x", os.getcwd())
+          os.system("./sciantix.x")
 
           # removing useless file
-          os.remove("sciantix.exe")
+          os.remove("sciantix.x")
           os.remove("execution.txt")
           os.remove("input_check.txt")
           # os.remove("overview.txt")
@@ -58,7 +58,7 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
             print(f"Test failed!\n")
             number_of_tests_failed += 1
 
-        if mode_gold == '1':
+        if mode_gold == 1:
           
           try :
             os.path.exists('output.txt')
@@ -70,7 +70,7 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
           except :
             print(f"output.txt not found in {file}")
 
-        if mode_gold == '2':
+        if mode_gold == 2:
 
           if are_files_equal('output.txt', 'output_gold.txt') == True:
             print(f"Test passed!\n")
@@ -84,7 +84,7 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
             print(f"output.txt not found in {file}")
             data = data_gold
 
-        if mode_gold == '3':
+        if mode_gold == 3:
           print(f"...golding existing results.")
           os.remove('output_gold.txt')
           os.rename('output.txt', 'output_gold.txt')
@@ -101,8 +101,13 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
         # output.txt
         # find indexes
         timePos = findSciantixVariablePosition(data, "Time (h)")
+        print(timePos)
         temperaturePos = findSciantixVariablePosition(data, "Temperature (K)")
+        print(temperaturePos)
+        """hePos = findSciantixVariablePosition(data, "He fractional release (/)")
+        print(hePos)"""
         heReleasedPos = findSciantixVariablePosition(data, "He fractional release (/)")
+        #print(heReleasedPos)
         heReleasedRatePos = findSciantixVariablePosition(data, "He release rate (at/m3 s)")
 
         # arrays
@@ -125,7 +130,7 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
         heReleaseRateG = data_Cognini[1:,heReleasedRatePosG].astype(float)
 
         """ Plot: Helium fractional release """
-        if mode_plot == '1':
+        if mode_plot == 1:
 
           fig, ax = plt.subplots(1,2)
 

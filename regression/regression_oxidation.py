@@ -15,7 +15,7 @@ from regression_functions import *
 
 """ UO2 stiochiometry deviation: calculations and experimental data """
 def regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed):
-  if mode_oxidation == '1':
+  if mode_oxidation == 1:
     for file in os.listdir(wpath):
       if "oxidation" in file and os.path.isdir(file) is True:
         folderList.append((file))
@@ -24,15 +24,15 @@ def regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList
         print(f"Now in folder {file}...")
         number_of_tests += 1
 
-        if mode_gold == '0' or mode_gold == '1':
+        if mode_gold == 0 or mode_gold == 1:
 
           # copying and executing sciantix.exe into cwd
-          shutil.copy("..\sciantix.exe", os.getcwd())
-          shutil.copy("..\input_scaling_factors.txt", os.getcwd())
-          os.system("sciantix.exe")
+          shutil.copy("../sciantix.x", os.getcwd())
+          shutil.copy("../input_scaling_factors.txt", os.getcwd())
+          os.system("./sciantix.x")
 
           # removing useless file
-          os.remove("sciantix.exe")
+          os.remove("sciantix.x")
           os.remove("execution.txt")
           os.remove("input_check.txt")
           # os.remove("overview.txt")
@@ -49,14 +49,14 @@ def regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList
           print(f"output_gold.txt not found in {file}")
           data_gold = np.ones(shape=(1, 1))
           
-        if mode_gold == '0':
+        if mode_gold == 0:
           if are_files_equal('output.txt', 'output_gold.txt') == True:
             print(f"Test passed!\n")
           else:
             print(f"Test failed!\n")
             number_of_tests_failed += 1
 
-        if mode_gold == '1':
+        if mode_gold == 1:
           try :
             os.path.exists('output.txt')
             print(f"...golding results.")
@@ -65,7 +65,7 @@ def regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList
           except :
             print(f"output.txt not found in {file}")
 
-        if mode_gold == '2':
+        if mode_gold == 2:
 
           if are_files_equal('output.txt', 'output_gold.txt') == True:
             print(f"Test passed!\n")
@@ -79,7 +79,7 @@ def regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList
             # print(f"output.txt not found in {file}")
             data = data_gold
 
-        if mode_gold == '3':
+        if mode_gold == 3:
           print(f"...golding existing results.")
           os.remove('output_gold.txt')
           os.rename('output.txt', 'output_gold.txt')
@@ -102,7 +102,7 @@ def regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList
 
 
         """ Plot: Stoichiometry deviation """
-        if mode_plot == '1':
+        if mode_plot == 1:
 
           fig, ax = plt.subplots()
 
