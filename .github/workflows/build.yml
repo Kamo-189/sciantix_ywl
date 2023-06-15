@@ -19,6 +19,6 @@ jobs:
           make
           ls
           cd bin
-          echo "in bin""
+          echo "in bin"
           
 
