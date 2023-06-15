@@ -34,6 +34,36 @@ def main():
     # - Number of failed test
     number_of_tests_failed = number_of_tests_failed_b = number_of_tests_failed_w = number_of_tests_failed_t = number_of_tests_failed_c = number_of_tests_failed_o = 0
 
+
+    # Specific version for the pipeline environment with default values
+    # (each test is executed with sciantix, and no modifications of gold)
+    if os.environ.get('GITHUB_ACTIONS') == 'true':
+        # Default values
+        mode_gold = 0
+        mode_plot = 0
+        mode_Baker = 1
+        mode_White = 1
+        mode_Talip = 1
+        mode_CONTACT = 1
+        mode_oxidation = 1
+
+        folderListB, number_of_tests_b, number_of_tests_failed_b = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+        folderListW, number_of_tests_w, number_of_tests_failed_w = regression_white(wpath, mode_White, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+        folderListT, number_of_tests_t, number_of_tests_failed_t = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+        folderListC, number_of_tests_c, number_of_tests_failed_c = regression_contact(wpath, mode_CONTACT, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+        folderListO, number_of_tests_o, number_of_tests_failed_o = regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+
+        folderList = folderListB + folderListW + folderListT + folderListC + folderListO
+        number_of_tests = number_of_tests_b + number_of_tests_w + number_of_tests_t + number_of_tests_c + number_of_tests_o
+        number_of_tests_failed = number_of_tests_failed_b + number_of_tests_failed_w + number_of_tests_failed_t + number_of_tests_failed_c + number_of_tests_failed_o
+
+
+
+    # For user utilisation :
+    # 0 : default
+    # 1 : choose all inputs
+
+
     # Chosing the type of execution, default values or given by the user
     print("\n-----------------This script executes SCIANTIX into the validation cases-----------------\n")
     print("\tExecution option == 0 USE DEFAULT MODES")
@@ -44,8 +74,6 @@ def main():
     if execution_option == 0 :
 
         # Default values
-        mode_gold = 0
-        mode_plot = 0
         mode_Baker = 1
         mode_White = 1
         mode_Talip = 1
@@ -67,7 +95,7 @@ def main():
 
         folderListB, number_of_tests_b, number_of_tests_failed_b = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListW, number_of_tests_w, number_of_tests_failed_w = regression_white(wpath, mode_White, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-        #folderListT, number_of_tests_t, number_of_tests_failed_t = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+        folderListT, number_of_tests_t, number_of_tests_failed_t = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListC, number_of_tests_c, number_of_tests_failed_c = regression_contact(wpath, mode_CONTACT, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListO, number_of_tests_o, number_of_tests_failed_o = regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
 
