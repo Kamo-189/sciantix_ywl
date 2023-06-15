@@ -156,6 +156,7 @@ def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number
   if mode_Baker == 0 :
     return folderList, number_of_tests, number_of_tests_failed
 
+  print(os.listdir('.')) # check sciantix.x presence
   # Go in all the possible test_folder in the current depository path
   for file in os.listdir(wpath):
 
