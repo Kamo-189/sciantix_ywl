@@ -16,8 +16,21 @@ import shutil
 from regression_baker import regression_baker
 from regression_white import regression_white
 from regression_talip import regression_talip
+from regression_talip_old import regression_talip_old
 from regression_contact import regression_contact
 from regression_oxidation import regression_oxidation
+
+
+def remove_output(file):
+    os.chdir(file)
+    print(f"Now in folder {file}...")
+    print(os.listdir('.'))
+    try :
+        os.remove("output.txt")
+    except :
+        print("no output.txt")
+    print(os.listdir('.'))
+    os.chdir('..')
 
 " ------------------- Main part -------------------"
 def main():
@@ -74,7 +87,24 @@ def main():
         print("\n-----------------This script executes SCIANTIX into the validation cases-----------------\n")
         print("\tExecution option == 0 USE DEFAULT MODES")
         print("\tExecution option == 1 PERSONALISED MODES")
-        execution_option = int(input("\nEnter Execution option (0, 1) = "))
+        print("\tExecution option == 2 REMOVE ALL OUTPUT FILES")
+        execution_option = int(input("\nEnter Execution option (0, 1, 2) = "))
+
+        # Case where we just remove all output files
+        if execution_option == 2 :
+            for file in os.listdir(wpath):
+                if "Baker" in file and os.path.isdir(file) is True:
+                    remove_output(file)
+                if "White" in file and os.path.isdir(file) is True:
+                    remove_output(file)
+                if "Talip" in file and os.path.isdir(file) is True:
+                    remove_output(file)
+                if "CONTACT" in file and os.path.isdir(file) is True:
+                    remove_output(file)
+                if "oxidation" in file and os.path.isdir(file) is True:
+                    remove_output(file)
+                mode_gold = -1
+                mode_plot = -1
 
         # Case of default values with all regressions
         if execution_option == 0 :
@@ -140,11 +170,14 @@ def main():
                 folderList, number_of_tests, number_of_tests_failed = regression_white(wpath, mode_White, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
                 print("\nRegression selected : White")
             if regression_mode == 2 :
-                print("Talip doesn't work right now")
-                main()
-                """mode_Talip = 1
-                folderList, number_of_tests, number_of_tests_failed = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-                print("\nRegression selected : Talip")"""
+                mode_Talip = 1
+                which_Talip = int(input("Enter Which Talip : - New : 0 / - Old : 1 "))
+                if which_Talip == 0:
+                    folderList, number_of_tests, number_of_tests_failed = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+                if which_Talip == 1:
+                    folderList, number_of_tests, number_of_tests_failed = regression_talip_old(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+
+            print("\nRegression selected : Talip")
             if regression_mode == 3 :
                 mode_CONTACT = 1
                 folderList, number_of_tests, number_of_tests_failed = regression_contact(wpath, mode_CONTACT, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)

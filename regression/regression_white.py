@@ -284,10 +284,17 @@ def regression_white(wpath, mode_White, mode_gold, mode_plot, folderList, number
   if mode_White == 0:
     return folderList, number_of_tests, number_of_tests_failed
 
-  for file in os.listdir(wpath):
+  # Get list of all files and directories in wpath
+  files_and_dirs = os.listdir(wpath)
 
-    if "White" in file and os.path.isdir(file) is True:
-      folderList.append((file))
+  # Sort them by filename
+  sorted_files_and_dirs = sorted(files_and_dirs)
+
+  # Iterate over sorted list
+  for file in sorted_files_and_dirs:
+    # Verify on a given folder, if Baker is in it's name
+    if "White" in file and os.path.isdir(file):
+      folderList.append(file)
       os.chdir(file)
 
       print(f"Now in folder {file}...")

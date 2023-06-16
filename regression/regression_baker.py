@@ -156,13 +156,17 @@ def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number
   if mode_Baker == 0 :
     return folderList, number_of_tests, number_of_tests_failed
 
-  print(os.listdir('.')) # check sciantix.x presence
-  # Go in all the possible test_folder in the current depository path
-  for file in os.listdir(wpath):
+  # Get list of all files and directories in wpath
+  files_and_dirs = os.listdir(wpath)
 
+  # Sort them by filename
+  sorted_files_and_dirs = sorted(files_and_dirs)
+
+  # Iterate over sorted list
+  for file in sorted_files_and_dirs:
     # Verify on a given folder, if Baker is in it's name
-    if "Baker" in file and os.path.isdir(file) is True:
-      folderList.append((file))
+    if "Baker" in file and os.path.isdir(file):
+      folderList.append(file)
       os.chdir(file)
 
       print(f"Now in folder {file}...")
@@ -212,6 +216,7 @@ def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number
 
   # Check if the user chose to show the different plots
   if mode_plot == 1:
+    print(igSwelling2)
     do_plot()
 
   """ Statistical analysis """
