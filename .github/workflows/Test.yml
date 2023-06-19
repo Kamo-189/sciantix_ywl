@@ -72,5 +72,6 @@ jobs:
       - name: Run tests
         run: |
           source venv/bin/activate
+          echo "In Regression"
           cd regression
           python3 ./regression.py
