@@ -138,6 +138,7 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
 
   # Sort them by filename
   sorted_files_and_dirs = sorted(files_and_dirs)
+  print(sorted_files_and_dirs)
 
   # Iterate over sorted list
   for file in sorted_files_and_dirs:
