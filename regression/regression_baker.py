@@ -243,6 +243,7 @@ def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number
   deviations_2 = abs(np.array(igSwellingBaker) - igSwelling2)
   print(f"SCIANTIX 1.0 - MAD: ", np.median(deviations_1))
   print(f"SCIANTIX 2.0 - MAD: ", np.median(deviations_2))
+
   # RMSE
   print(f"SCIANTIX 1.0 - RMSE: ", np.mean(np.array(igSwellingBaker) - igSwelling1)**2)
   print(f"SCIANTIX 2.0 - RMSE: ", np.mean(np.array(igSwellingBaker) - igSwelling2)**2)
