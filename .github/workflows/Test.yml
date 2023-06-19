@@ -74,5 +74,6 @@ jobs:
           source venv/bin/activate
           echo "In Regression"
           cd regression
+          ls
           chmod +x ./sciantix.x  # add the execute permission
           python3 ./regression.py
