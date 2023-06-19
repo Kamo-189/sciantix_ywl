@@ -51,7 +51,7 @@ def regression_talip_old(wpath, mode_Talip, mode_gold, mode_plot, folderList, nu
                     print(f"output_gold.txt not found in {file}")
                     data_gold = np.ones(shape=(1, 1))
 
-                if mode_gold == '0':
+                if mode_gold == 0:
                     if are_files_equal('output.txt', 'output_gold.txt') == True:
                         print(f"Test passed!\n")
                     else:
@@ -100,15 +100,17 @@ def regression_talip_old(wpath, mode_Talip, mode_gold, mode_plot, folderList, nu
 
                 # output.txt
                 # find indexes
+                print("data :", data)
                 timePos = findSciantixVariablePosition(data, "Time (h)")
-                print(timePos)
+                print("timePos : ", timePos)
                 temperaturePos = findSciantixVariablePosition(data, "Temperature (K)")
-                print(temperaturePos)
+                print("temperaturePos : ", temperaturePos)
                 """hePos = findSciantixVariablePosition(data, "He fractional release (/)")
                 print(hePos)"""
                 heReleasedPos = findSciantixVariablePosition(data, "He fractional release (/)")
-                #print(heReleasedPos)
+                print("heReleasedPos : ", heReleasedPos)
                 heReleasedRatePos = findSciantixVariablePosition(data, "He release rate (at/m3 s)")
+                print("heReleasedRatePos : ", heReleasedRatePos)
 
                 # arrays
                 time = data[1:,timePos].astype(float)

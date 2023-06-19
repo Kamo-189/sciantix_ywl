@@ -67,7 +67,7 @@ def main():
 
         folderListB, number_of_tests_b, number_of_tests_failed_b = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListW, number_of_tests_w, number_of_tests_failed_w = regression_white(wpath, mode_White, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-        folderListT, number_of_tests_t, number_of_tests_failed_t = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+        folderListT, number_of_tests_t, number_of_tests_failed_t = regression_talip_old(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListC, number_of_tests_c, number_of_tests_failed_c = regression_contact(wpath, mode_CONTACT, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListO, number_of_tests_o, number_of_tests_failed_o = regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
 
