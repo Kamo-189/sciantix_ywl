@@ -64,6 +64,7 @@ def main():
         mode_Talip = 1
         mode_CONTACT = 1
         mode_oxidation = 1
+        test_condition = 1
 
         folderListB, number_of_tests_b, number_of_tests_failed_b = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListW, number_of_tests_w, number_of_tests_failed_w = regression_white(wpath, mode_White, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
@@ -196,10 +197,10 @@ def main():
     print("! Number of tests = ", number_of_tests)
     print("! Number of tests passed = ", number_of_tests - number_of_tests_failed)
     print("! Number of tests failed = ", number_of_tests_failed, "\n")
-    """
-    if number_of_tests_failed > 0:
-        print("-----------------ONE OR MORE TESTS HAVE FAILED-----------------")
-        sys.exit(1)"""
+    if test_condition == 1 :
+        if number_of_tests_failed > 0:
+            print("-----------------ONE OR MORE TESTS HAVE FAILED-----------------")
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()
