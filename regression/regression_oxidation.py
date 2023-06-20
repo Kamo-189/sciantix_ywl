@@ -172,7 +172,6 @@ def regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList
 
       # Check if the user has chosen to display the various plots
       if mode_plot == 1:
-        print("in plot : do_plot = ", mode_plot)
         do_plot(time, temperature, stiochiometryDeviation, stiochiometryDeviationData, file)
 
       os.chdir('..')

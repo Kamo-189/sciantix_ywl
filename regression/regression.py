@@ -16,9 +16,7 @@ import shutil
 from regression_baker import regression_baker
 from regression_white import regression_white
 from regression_talip import regression_talip
-from regression_talip_old import regression_talip_old
 from regression_contact import regression_contact
-from regression_contact_old import regression_contact_old
 from regression_oxidation import regression_oxidation
 
 
