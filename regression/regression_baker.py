@@ -216,7 +216,6 @@ def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number
 
   # Check if the user chose to show the different plots
   if mode_plot == 1:
-    print(igSwelling2)
     do_plot()
 
   """ Statistical analysis """

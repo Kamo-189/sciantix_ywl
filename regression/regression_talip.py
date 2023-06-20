@@ -17,9 +17,6 @@ from regression_functions import *
 
 """ ------------------- Global Variables ------------------- """
 
-#heReleasedTalip14000_data = np.genfromtxt("Talip2014_release_data.txt")
-#heReleasedRateTalip14000_data = np.genfromtxt("Talip2014_rrate_data.txt")
-
 """ ------------------- Functions ------------------- """
 
 # Verification of the test
@@ -87,7 +84,8 @@ def do_gold():
     print(f"output.txt not found in {file}")
 
 # Show the different plot of the regression test
-def do_plot():
+def do_plot(heReleasedTalip14000_data, heReleasedRateTalip14000_data, time, temperature, heReleasedFrac, heReleaseRate,
+            timeG, heReleasedFracG, temperatureG, heReleaseRateG):
   fig, ax = plt.subplots(1,2)
 
   plt.subplots_adjust(left=0.1,
@@ -138,7 +136,7 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
 
   # Sort them by filename
   sorted_files_and_dirs = sorted(files_and_dirs)
-  print(sorted_files_and_dirs)
+  #print(sorted_files_and_dirs)
 
   # Iterate over sorted list
   for file in sorted_files_and_dirs:
@@ -189,17 +187,12 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
       heReleasedRateTalip14000_data = np.genfromtxt("Talip2014_rrate_data.txt")
       # output.txt
       # find indexes
-      print("data :", data)
       timePos = findSciantixVariablePosition(data, "Time (h)")
-      print("timePos : ", timePos)
       temperaturePos = findSciantixVariablePosition(data, "Temperature (K)")
-      print("temperaturePos : ", temperaturePos)
-      """hePos = findSciantixVariablePosition(data, "He fractional release (/)")
-      print(hePos)"""
+      hePos = findSciantixVariablePosition(data, "He fractional release (/)")
       heReleasedPos = findSciantixVariablePosition(data, "He fractional release (/)")
-      print("heReleasedPos : ", heReleasedPos)
       heReleasedRatePos = findSciantixVariablePosition(data, "He release rate (at/m3 s)")
-      print("heReleasedRatePos : ", heReleasedRatePos)
+
 
       # arrays
       time = data[1:,timePos].astype(float)
@@ -215,16 +208,18 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
       temperaturePosG = findSciantixVariablePosition(data_Cognini, "Temperature (K)")
 
       # arrays
-      timeG = data_Cognini[1:,timePos].astype(float)
+      timeG = data_Cognini[1:,timePosG].astype(float)
       heReleasedFracG = data_Cognini[1:,heReleasedPosG].astype(float)
       temperatureG = data_Cognini[1:,temperaturePosG].astype(float)
       heReleaseRateG = data_Cognini[1:,heReleasedRatePosG].astype(float)
 
-      os.chdir('..')
+      # Check if the user chose to show the different plots
+      if mode_plot == 1:
+        do_plot(heReleasedTalip14000_data, heReleasedRateTalip14000_data, time, temperature, heReleasedFrac, heReleaseRate,
+                timeG, heReleasedFracG, temperatureG, heReleaseRateG)
 
-  # Check if the user chose to show the different plots
-  if mode_plot == 1:
-    do_plot()
+
+      os.chdir('..')
 
   return folderList, number_of_tests, number_of_tests_failed
 

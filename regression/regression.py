@@ -18,45 +18,44 @@ from regression_white import regression_white
 from regression_talip import regression_talip
 from regression_talip_old import regression_talip_old
 from regression_contact import regression_contact
+from regression_contact_old import regression_contact_old
 from regression_oxidation import regression_oxidation
 
 
+# The function `remove_output` is used to remove an existing output file (output.txt) from a specified folder
 def remove_output(file):
+    # Change current working directory to the specified file's directory
     os.chdir(file)
     print(f"Now in folder {file}...")
-    print(os.listdir('.'))
     try :
         os.remove("output.txt")
     except :
         print("no output.txt")
-    print(os.listdir('.'))
-    os.chdir('..')
+    os.chdir('..') # Change working directory back to the parent directory
 
 " ------------------- Main part -------------------"
 def main():
 
-    print(os.listdir('.'))
+    # Copy the file 'sciantix.x' from the parent directory's 'bin' folder to the current directory
     shutil.copy("../bin/sciantix.x", os.getcwd())
-    print(os.listdir('.'))
 
-    # Stocking the directory path of the current file
+    # Stock the directory path of the current file
     wpath = os.path.dirname(os.path.realpath(__file__))
-    os.chdir(wpath)
+    os.chdir(wpath) # Change the working directory to the path stored in 'wpath'
 
-    # Initialising different variable needed for the execution :
-
-    # - A list of folder to stock every test that will be executed
+    # Initialize different variables needed for the execution :
+    # - A list 'folderList' to store the names of every test that will be executed. Different variations of this list are initialized for different test types.
     folderList = folderListB = folderListW = folderListT = folderListC = folderListO = []
-    # - Number of executed test
+    # - Variables to count the number of executed tests. Different counts are maintained for different test types.
     number_of_tests = number_of_tests_b = number_of_tests_w = number_of_tests_t = number_of_tests_c = number_of_tests_o = 0
-    # - Number of failed test
+    # - Variables to count the number of failed tests. Different counts are maintained for different test types.
     number_of_tests_failed = number_of_tests_failed_b = number_of_tests_failed_w = number_of_tests_failed_t = number_of_tests_failed_c = number_of_tests_failed_o = 0
 
-
-    # Specific version for the pipeline environment with default values
-    # (each test is executed with sciantix, and no modifications of gold)
+    # If the environment variable 'GITHUB_ACTIONS' is set to 'true', this means the script is running in a GitHub Actions environment.
+    # In this case, specific versions of the variables are set for the pipeline environment with default values.
+    # Each test is executed with 'sciantix', and no modifications are made to the gold standard test results.
     if os.environ.get('GITHUB_ACTIONS') == 'true':
-        # Default values
+        # Set default values for the execution modes.
         mode_gold = 0
         mode_plot = 0
         mode_Baker = 1
@@ -64,35 +63,40 @@ def main():
         mode_Talip = 1
         mode_CONTACT = 1
         mode_oxidation = 1
-        test_condition = 1
+        # Set the test condition to '0' or '1'
+        test_condition = 0
 
+        # Run regression tests for each regression mode and update the test list and test counts accordingly.
         folderListB, number_of_tests_b, number_of_tests_failed_b = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListW, number_of_tests_w, number_of_tests_failed_w = regression_white(wpath, mode_White, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListT, number_of_tests_t, number_of_tests_failed_t = regression_talip_old(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListC, number_of_tests_c, number_of_tests_failed_c = regression_contact(wpath, mode_CONTACT, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
         folderListO, number_of_tests_o, number_of_tests_failed_o = regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
 
+        # Combine the test lists from the different modes into one comprehensive list.
         folderList = folderListB + folderListW + folderListT + folderListC + folderListO
+        # Add up the counts of the executed tests from the different modes.
         number_of_tests = number_of_tests_b + number_of_tests_w + number_of_tests_t + number_of_tests_c + number_of_tests_o
+        # Add up the counts of the failed tests from the different modes.
         number_of_tests_failed = number_of_tests_failed_b + number_of_tests_failed_w + number_of_tests_failed_t + number_of_tests_failed_c + number_of_tests_failed_o
 
 
 
+    # If the environment variable 'GITHUB_ACTIONS' is not set to 'true', this means the script is not running in a GitHub Actions environment. It's being run by a user.
     if os.environ.get('GITHUB_ACTIONS') != 'true':
-        # For user utilisation :
-        # 0 : default
-        # 1 : choose all inputs
+        # Initialize test_condition to '0'. This means no specific test conditions are set for user-run tests.
+        test_condition = 0
 
-
-        # Chosing the type of execution, default values or given by the user
+        # Provide options for the user to choose the execution mode.
         print("\n-----------------This script executes SCIANTIX into the validation cases-----------------\n")
         print("\tExecution option == 0 USE DEFAULT MODES")
         print("\tExecution option == 1 PERSONALISED MODES")
         print("\tExecution option == 2 REMOVE ALL OUTPUT FILES")
-        execution_option = int(input("\nEnter Execution option (0, 1, 2) = "))
+        execution_option = int(input("\nEnter Execution option (0, 1, 2) = ")) # Take the user's input for the execution option.
 
-        # Case where we just remove all output files
+        # If execution_option is set to '2', this means the user wants to remove all output files.
         if execution_option == 2 :
+            # For each file in the working directory, if the file is a directory and its name contains 'Baker', 'White', 'Talip', 'CONTACT', or 'oxidation', then run the 'remove_output' function on that file.
             for file in os.listdir(wpath):
                 if "Baker" in file and os.path.isdir(file) is True:
                     remove_output(file)
@@ -104,64 +108,71 @@ def main():
                     remove_output(file)
                 if "oxidation" in file and os.path.isdir(file) is True:
                     remove_output(file)
+                # Set the gold mode and plot mode to '-1'. This means these modes are not in use when removing output files.
                 mode_gold = -1
                 mode_plot = -1
 
-        # Case of default values with all regressions
+        # If execution_option is set to '0', this means the user wants to use default execution modes.
         if execution_option == 0 :
 
-            # Default values
+            # Set the default values for the Baker, White, Talip, Contact, and Oxidation modes.
             mode_Baker = 1
             mode_White = 1
             mode_Talip = 1
             mode_CONTACT = 1
             mode_oxidation = 1
 
-            # Chosing the gold mode
-            print("Pleast select one option for the GOLD MODE :\n")
-            print("\tMODE GOLD == 0: use S"
-                  "CIANTIX, check new results.\n")
-            print("\tMODE GOLD == 1: use SCIANTIX, new results will be saved as gold results.\n ")
-            print("\tMODE GOLD == 2: do not use SCIANTIX, check existing results.\n ")
-            print("\tMODE GOLD == 3: do not use SCIANTIX, existing results will be saved as gold results.\n ")
-
-            mode_gold = int(input("Enter MODE GOLD (0, 1, 2, 3)= "))
-
-            # Chosing the if you want to show the different plot
-            mode_plot = int(input("Enter MODE PLOT (0 or 1)= "))
-
-            folderListB, number_of_tests_b, number_of_tests_failed_b = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-            folderListW, number_of_tests_w, number_of_tests_failed_w = regression_white(wpath, mode_White, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-            folderListT, number_of_tests_t, number_of_tests_failed_t = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-            folderListC, number_of_tests_c, number_of_tests_failed_c = regression_contact(wpath, mode_CONTACT, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-            folderListO, number_of_tests_o, number_of_tests_failed_o = regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-
-            folderList = folderListB + folderListW + folderListT + folderListC + folderListO
-            number_of_tests = number_of_tests_b + number_of_tests_w + number_of_tests_t + number_of_tests_c + number_of_tests_o
-            number_of_tests_failed = number_of_tests_failed_b + number_of_tests_failed_w + number_of_tests_failed_t + number_of_tests_failed_c + number_of_tests_failed_o
-
-
-        # Case where the user chose values
-        if execution_option == 1 :
-
-            # Chosing the type of regression : Baker, White, Talip, Contact, Oxidation
-            print("Possible regression options \n")
-            print("Baker : 0\nWhite : 1\nTalip : 2\nContact : 3\nOxidation : 4\n")
-
-            regression_mode = int(input("Enter the chosen regression (0, 1, 2, 3, 4) = "))
-
-            # Chosing the gold mode
+            # Ask the user to choose an option for the gold mode.
             print("Pleast select one option for the GOLD MODE :\n")
             print("\tMODE GOLD == 0: use SCIANTIX, check new results.\n")
             print("\tMODE GOLD == 1: use SCIANTIX, new results will be saved as gold results.\n ")
             print("\tMODE GOLD == 2: do not use SCIANTIX, check existing results.\n ")
             print("\tMODE GOLD == 3: do not use SCIANTIX, existing results will be saved as gold results.\n ")
 
+            # Take the user's input for the gold mode.
             mode_gold = int(input("Enter MODE GOLD (0, 1, 2, 3)= "))
 
-            # Chosing the if you want to show the different plot
+            # Ask the user to choose an option for the plot mode.
             mode_plot = int(input("Enter MODE PLOT (0 or 1)= "))
 
+            # For each execution mode (Baker, White, Talip, Contact, Oxidation), run the corresponding regression test function and update the test list and test counts accordingly.
+            folderListB, number_of_tests_b, number_of_tests_failed_b = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+            folderListW, number_of_tests_w, number_of_tests_failed_w = regression_white(wpath, mode_White, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+            folderListT, number_of_tests_t, number_of_tests_failed_t = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+            folderListC, number_of_tests_c, number_of_tests_failed_c = regression_contact(wpath, mode_CONTACT, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+            folderListO, number_of_tests_o, number_of_tests_failed_o = regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+
+            # Combine the test lists from the different modes into one comprehensive list.
+            folderList = folderListB + folderListW + folderListT + folderListC + folderListO
+            # Add up the counts of the executed tests from the different modes.
+            number_of_tests = number_of_tests_b + number_of_tests_w + number_of_tests_t + number_of_tests_c + number_of_tests_o
+            # Add up the counts of the failed tests from the different modes.
+            number_of_tests_failed = number_of_tests_failed_b + number_of_tests_failed_w + number_of_tests_failed_t + number_of_tests_failed_c + number_of_tests_failed_o
+
+        # Case where the user chose values
+        if execution_option == 1 :
+
+            # Provide options for the user to choose the type of regression test.
+            print("Possible regression options \n")
+            print("Baker : 0\nWhite : 1\nTalip : 2\nContact : 3\nOxidation : 4\n")
+
+            # Take the user's input for the regression type.
+            regression_mode = int(input("Enter the chosen regression (0, 1, 2, 3, 4) = "))
+
+            # Ask the user to choose an option for the gold mode.
+            print("Pleast select one option for the GOLD MODE :\n")
+            print("\tMODE GOLD == 0: use SCIANTIX, check new results.\n")
+            print("\tMODE GOLD == 1: use SCIANTIX, new results will be saved as gold results.\n ")
+            print("\tMODE GOLD == 2: do not use SCIANTIX, check existing results.\n ")
+            print("\tMODE GOLD == 3: do not use SCIANTIX, existing results will be saved as gold results.\n ")
+
+            # Take the user's input for the gold mode.
+            mode_gold = int(input("Enter MODE GOLD (0, 1, 2, 3)= "))
+
+            # Ask the user to choose an option for the plot mode.
+            mode_plot = int(input("Enter MODE PLOT (0 or 1)= "))
+
+            # For each execution mode (Baker, White, Talip, Contact, Oxidation), if the mode is set to '1', run the corresponding regression test function and update the test list and test counts accordingly.
             if regression_mode == 0 :
                 mode_Baker = 1
                 folderList, number_of_tests, number_of_tests_failed = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
@@ -172,13 +183,8 @@ def main():
                 print("\nRegression selected : White")
             if regression_mode == 2 :
                 mode_Talip = 1
-                which_Talip = int(input("Enter Which Talip : - New : 0 / - Old : 1 "))
-                if which_Talip == 0:
-                    folderList, number_of_tests, number_of_tests_failed = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-                if which_Talip == 1:
-                    folderList, number_of_tests, number_of_tests_failed = regression_talip_old(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
-
-            print("\nRegression selected : Talip")
+                folderList, number_of_tests, number_of_tests_failed = regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+                print("\nRegression selected : Talip")
             if regression_mode == 3 :
                 mode_CONTACT = 1
                 folderList, number_of_tests, number_of_tests_failed = regression_contact(wpath, mode_CONTACT, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
@@ -197,10 +203,14 @@ def main():
     print("! Number of tests = ", number_of_tests)
     print("! Number of tests passed = ", number_of_tests - number_of_tests_failed)
     print("! Number of tests failed = ", number_of_tests_failed, "\n")
+
+    # If the test condition is set to one, run the verification
+    # If there are any failed tests, exit the script with a non-zero status code to indicate the failure.
     if test_condition == 1 :
         if number_of_tests_failed > 0:
             print("-----------------ONE OR MORE TESTS HAVE FAILED-----------------")
             sys.exit(1)
 
+# If the script is being run as the main program, call the 'main' function.
 if __name__ == "__main__":
     main()
