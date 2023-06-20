@@ -19,17 +19,7 @@ from regression_functions import *
 
 """ ------------------- Functions ------------------- """
 
-# Verification of the test
-def check_result(number_of_tests_failed):
-  if are_files_equal('output.txt', 'output_gold.txt') == True:
-    print(f"Test passed!\n")
-  else:
-    print(f"Test failed!\n")
-    number_of_tests_failed += 1
-
-  return number_of_tests_failed
-
-# Check the presence of output cognini
+# Verify the existence of the file: output_Cognini.txt
 def check_cognini():
   try :
     data_Cognini = import_data("output_Cognini.txt")
@@ -39,8 +29,17 @@ def check_cognini():
 
     return data_Cognini
 
+# Verify the test results
+def check_result(number_of_tests_failed):
+  if are_files_equal('output.txt', 'output_gold.txt') == True:
+    print(f"Test passed!\n")
+  else:
+    print(f"Test failed!\n")
+    number_of_tests_failed += 1
 
-# Verification of the existence of : output.txt and output_gold.txt
+  return number_of_tests_failed
+
+# Verify the existence of the files: output.txt and output_gold.txt
 def check_output():
   try :
     data = import_data("output.txt")
@@ -56,7 +55,7 @@ def check_output():
 
   return data, data_gold
 
-# Application of sciantix in the current test folder
+# Execute sciantix in the current test folder
 def do_sciantix():
   # copying input files from the regression folder into the current folder
   #shutil.copy("../input_settings.txt", os.getcwd())
@@ -72,7 +71,7 @@ def do_sciantix():
   os.remove("input_check.txt")
   # os.remove("overview.txt")
 
-# Replace the current output_gold.txt with the new output
+# Replace the existing output_gold.txt with the new output.txt
 def do_gold():
   try :
     os.path.exists('output.txt')
@@ -83,7 +82,7 @@ def do_gold():
   except :
     print(f"output.txt not found in {file}")
 
-# Show the different plot of the regression test
+# Plot the regression test results
 def do_plot(heReleasedTalip14000_data, heReleasedRateTalip14000_data, time, temperature, heReleasedFrac, heReleaseRate,
             timeG, heReleasedFracG, temperatureG, heReleaseRateG):
   fig, ax = plt.subplots(1,2)
@@ -213,7 +212,7 @@ def regression_talip(wpath, mode_Talip, mode_gold, mode_plot, folderList, number
       temperatureG = data_Cognini[1:,temperaturePosG].astype(float)
       heReleaseRateG = data_Cognini[1:,heReleasedRatePosG].astype(float)
 
-      # Check if the user chose to show the different plots
+      # Check if the user has chosen to display the various plots
       if mode_plot == 1:
         do_plot(heReleasedTalip14000_data, heReleasedRateTalip14000_data, time, temperature, heReleasedFrac, heReleaseRate,
                 timeG, heReleasedFracG, temperatureG, heReleaseRateG)

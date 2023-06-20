@@ -16,12 +16,10 @@ from regression_functions import *
 
 """ ------------------- Global Variables ------------------- """
 
-#exp_Xe133 = import_data("experimental_RB_Xe133.txt")
-#exp_Kr85m = import_data("experimental_RB_Kr85m.txt")
-
 
 """ ------------------- Functions ------------------- """
-# Verification of the test
+
+# Verify the test results
 def check_result(number_of_tests_failed):
   if are_files_equal('output.txt', 'output_gold.txt') == True:
     print(f"Test passed!\n")
@@ -31,7 +29,7 @@ def check_result(number_of_tests_failed):
 
   return number_of_tests_failed
 
-# Verification of the existence of : output.txt and output_gold.txt
+# Verify the existence of the files: output.txt and output_gold.txt
 def check_output():
   try :
     data = import_data("output.txt")
@@ -47,7 +45,7 @@ def check_output():
 
   return data, data_gold
 
-# Application of sciantix in the current test folder
+# Execute sciantix in the current test folder
 def do_sciantix():
   # copying input files from the regression folder into the current folder
   #shutil.copy("../input_settings.txt", os.getcwd())
@@ -63,7 +61,7 @@ def do_sciantix():
   os.remove("input_check.txt")
   # os.remove("overview.txt")
 
-# Replace the current output_gold.txt with the new output
+# Replace the existing output_gold.txt with the new output.txt
 def do_gold():
   try :
     os.path.exists('output.txt')
@@ -74,7 +72,7 @@ def do_gold():
   except :
     print(f"output.txt not found in {file}")
 
-# Show the different plot of the regression test
+# Plot the regression test results
 def do_plot(exp_Xe133, exp_Kr85m, calculated_Kr85m_Zullo2022, calculated_Xe133_Zullo2022, time, temperature, burnup, Xe133, Kr85m):
   fig, ax = plt.subplots(1,2)
   plt.subplots_adjust(left=0.1,
@@ -208,7 +206,7 @@ def regression_contact(wpath, mode_CONTACT, mode_gold, mode_plot, folderList, nu
       calculated_Kr85m_Zullo2022 = import_data("calculated_Kr85m_Zullo.txt")
       calculated_Xe133_Zullo2022 = import_data("calculated_Xe133_Zullo.txt")
 
-      # Check if the user chose to show the different plots
+      # Check if the user has chosen to display the various plots
       if mode_plot == 1:
         do_plot(exp_Xe133, exp_Kr85m, calculated_Kr85m_Zullo2022, calculated_Xe133_Zullo2022,
                 time, temperature, burnup, Xe133, Kr85m)

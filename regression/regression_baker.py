@@ -34,7 +34,7 @@ sample_number = len(igSwelling1)
 
 """ ------------------- Functions ------------------- """
 
-# Verification of the test
+# Verify the test results
 def check_result(number_of_tests_failed):
   if are_files_equal('output.txt', 'output_gold.txt') == True:
     print(f"Test passed!\n")
@@ -44,7 +44,7 @@ def check_result(number_of_tests_failed):
 
   return number_of_tests_failed
 
-# Verification of the existence of : output.txt and output_gold.txt
+# Verify the existence of the files: output.txt and output_gold.txt
 def check_output():
   try :
     data = import_data("output.txt")
@@ -60,11 +60,11 @@ def check_output():
 
   return data, data_gold
 
-# Application of sciantix in the current test folder
+# Execute sciantix in the current test folder
 def do_sciantix():
   # copying input files from the regression folder into the current folder
-  shutil.copy("../input_settings.txt", os.getcwd())
-  shutil.copy("../input_scaling_factors.txt", os.getcwd())
+  #shutil.copy("../input_settings.txt", os.getcwd())
+  #shutil.copy("../input_scaling_factors.txt", os.getcwd())
 
   # copying and executing sciantix.exe into cwd
   shutil.copy("../sciantix.x", os.getcwd())
@@ -76,7 +76,7 @@ def do_sciantix():
   os.remove("input_check.txt")
   # os.remove("overview.txt")
 
-# Replace the current output_gold.txt with the new output
+# Replace the existing output_gold.txt with the new output.txt
 def do_gold():
   try :
     os.path.exists('output.txt')
@@ -87,7 +87,7 @@ def do_gold():
   except :
     print(f"output.txt not found in {file}")
 
-# Show the different plot of the regression test
+# Plot the regression test results
 def do_plot():
   # SCIANTIX 1.0 vs. SCIANTIX 2.0
   fig, ax = plt.subplots()
@@ -214,7 +214,7 @@ def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number
 
       os.chdir('..')
 
-  # Check if the user chose to show the different plots
+  # Check if the user has chosen to display the various plots
   if mode_plot == 1:
     do_plot()
 
