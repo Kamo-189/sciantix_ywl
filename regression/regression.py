@@ -35,6 +35,7 @@ def remove_output(file):
 " ------------------- Main part -------------------"
 def main():
 
+
     # Copy the file 'sciantix.x' from the parent directory's 'bin' folder to the current directory
     shutil.copy("../bin/sciantix.x", os.getcwd())
 
@@ -208,9 +209,9 @@ def main():
 
 
 
-
-    if execution_option == 0 :
-        call_postProcessing(wpath)
+    if os.environ.get('GITHUB_ACTIONS') != 'true':
+        if execution_option == 0 :
+            call_postProcessing(wpath)
 
 
 
