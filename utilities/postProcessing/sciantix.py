@@ -151,3 +151,5 @@ print(f"This file (sciantix.py) is a python module made to handle the sciantix (
 print(f"Type help(sciantix) to get useful information.")
 variables = getDictionary()
 
+
+

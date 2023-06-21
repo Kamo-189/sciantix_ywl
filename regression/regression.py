@@ -18,6 +18,7 @@ from regression_white import regression_white
 from regression_talip import regression_talip
 from regression_contact import regression_contact
 from regression_oxidation import regression_oxidation
+from call_postProcessing import call_postProcessing
 
 
 # The function `remove_output` is used to remove an existing output file (output.txt) from a specified folder
@@ -44,10 +45,13 @@ def main():
     # Initialize different variables needed for the execution :
     # - A list 'folderList' to store the names of every test that will be executed. Different variations of this list are initialized for different test types.
     folderList = folderListB = folderListW = folderListT = folderListC = folderListO = []
+
     # - Variables to count the number of executed tests. Different counts are maintained for different test types.
     number_of_tests = number_of_tests_b = number_of_tests_w = number_of_tests_t = number_of_tests_c = number_of_tests_o = 0
+
     # - Variables to count the number of failed tests. Different counts are maintained for different test types.
     number_of_tests_failed = number_of_tests_failed_b = number_of_tests_failed_w = number_of_tests_failed_t = number_of_tests_failed_c = number_of_tests_failed_o = 0
+
 
     # If the environment variable 'GITHUB_ACTIONS' is set to 'true', this means the script is running in a GitHub Actions environment.
     # In this case, specific versions of the variables are set for the pipeline environment with default values.
@@ -201,6 +205,18 @@ def main():
     print("! Number of tests = ", number_of_tests)
     print("! Number of tests passed = ", number_of_tests - number_of_tests_failed)
     print("! Number of tests failed = ", number_of_tests_failed, "\n")
+
+
+
+
+    if execution_option == 0 :
+        call_postProcessing(wpath)
+
+
+
+
+
+
 
     # If the test condition is set to one, run the verification
     # If there are any failed tests, exit the script with a non-zero status code to indicate the failure.
