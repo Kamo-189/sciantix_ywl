@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - YML-Pipeline
+      - YML-Pipeline-Fresh
   pull_request:
 
 jobs:
