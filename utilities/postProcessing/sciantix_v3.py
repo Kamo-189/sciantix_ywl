@@ -21,8 +21,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import importlib
-import tkinter as tk
-from tkinter import messagebox
 
 """ Defining useful functions"""
 def is_output_here(filename):
@@ -159,46 +157,65 @@ def plot(x_name, y_name, output_filename = "output.txt", fig = None, ax = None):
 
 def sciantix_v2(file):
 
-    output_filename = file
-    output_tags = getDictionary(output_filename)
+    """ WELCOME """
+    print(f"This file (sciantix.py) is a python module made to handle the sciantix (standalone) postprocessing, and plot the quantities in the output.txt file.")
+    print(f"Type help(sciantix) to get useful information.")
 
-    def plot_graph():
-        if not listbox_x.curselection() or not listbox_y.curselection():
-            messagebox.showwarning("Selection error", "Please select an item from both lists.")
-            return
-        x_index = listbox_x.curselection()[0]
-        y_index = listbox_y.curselection()[0]
-        x_name = output_tags[x_index]
-        y_name = output_tags[y_index]
-        plot(x_name, y_name, output_filename)
+    """
 
-    root = tk.Tk()
+    print(os.getcwd())
 
-    listbox_x = tk.Listbox(root, exportselection=0)
-    listbox_x.pack(side="left")
+    # Construct the full path to the subfolder
+    subfolder_path = os.path.join(os.getcwd(), 'output_folder')
 
-    listbox_y = tk.Listbox(root, exportselection=0)
-    listbox_y.pack(side="right")
+    # Change the current working directory to the subfolder
+    os.chdir(subfolder_path)
 
-    for tag in output_tags:
-        listbox_x.insert(tk.END, tag)
-        listbox_y.insert(tk.END, tag)
+    wpath = os.getcwd()
 
-    button = tk.Button(root, text="Plot graph", command=plot_graph)
-    button.pack()
+    print("current folder before getDictionary : ",os.getcwd())
 
-    root.mainloop()
+    # Get list of all files and directories in wpath
+    files_and_dirs = os.listdir(wpath)
 
+    # Sort them by filename
+    sorted_files_and_dirs = sorted(files_and_dirs)
+
+    # Iterate over sorted list
+    for file in sorted_files_and_dirs:
+        if "output.txt" in file :
+            print("current file : ", file)
+            getDictionary(file)
+
+
+
+
+
+
+
+
+
+
+    os.chdir('..')"""
+    print(os.getcwd())
+    print("dictionnary of", file, " : \n")
+    output_tags = getDictionary(file)
+    print("output_tags : ", output_tags)
+
+    #plot(output_tags[0], output_tags[2], file)
+    for tag in output_tags :
+        print("current output : ", tag)
+        plot(output_tags[0], tag, file)
 
 
 
 
 def main():
-    # Check if 'output.txt' exists in the current directory
-    if 'output.txt' in os.listdir(os.getcwd()):
-        sciantix_v2('output.txt')
-    else:
-        print('No file named "output.txt" found in the current directory')
+    sciantix_v2()
 
+
+
+
+# If the script is being run as the main program, call the 'main' function.
 if __name__ == "__main__":
     main()

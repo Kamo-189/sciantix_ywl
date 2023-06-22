@@ -19,7 +19,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b447f62b-78b5-4606-a50e-6fdf21648ed2" name="Changes" comment="dai" />
+    <list default="true" id="b447f62b-78b5-4606-a50e-6fdf21648ed2" name="Changes" comment="dai">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regression/call_postProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/regression/call_postProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regression/regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/regression/regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utilities/postProcessing/sciantix_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilities/postProcessing/sciantix_v2.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -88,10 +94,11 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/charlesvalot/Desktop/POLIMI/sciantix_ywl/utilities/postProcessing",
+    "last_opened_file_path": "/Users/charlesvalot/Desktop/POLIMI/sciantix_ywl/bin",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -102,6 +109,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/bin" />
       <recent name="$PROJECT_DIR$/utilities/postProcessing" />
       <recent name="$PROJECT_DIR$/yml tests" />
       <recent name="$PROJECT_DIR$/.github/workflows" />
@@ -139,11 +147,6 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="Makefile Application.all" />
       <item itemvalue="Makefile Application.cleaner" />
@@ -165,6 +168,8 @@
       <workItem from="1686902993985" duration="10569000" />
       <workItem from="1687161470012" duration="14847000" />
       <workItem from="1687247610848" duration="7006000" />
+      <workItem from="1687421522065" duration="5351000" />
+      <workItem from="1687428779844" duration="10353000" />
     </task>
     <servers />
   </component>
