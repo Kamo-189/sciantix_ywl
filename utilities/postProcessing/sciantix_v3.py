@@ -21,6 +21,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import importlib
+import tkinter as tk
+from tkinter import messagebox
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+
+canvas = None  # Declare canvas as a global variable
+
 
 """ Defining useful functions"""
 def is_output_here(filename):
@@ -73,7 +80,7 @@ def getDictionary(file):
         name of the output file (e.g. 'output.txt')
         the output file must be in the sciantix.py directory or
         the path must de defined by sciantix.working_dir(path).
-        
+
         default name = 'output.txt'
 
     -------
@@ -106,7 +113,7 @@ def getDictionary(file):
 
     return output_tags
 
-def plot(x_name, y_name, output_filename = "output.txt", fig = None, ax = None):
+def plot(x_name, y_name, output_filename="output.txt", ax=None):
     """
     Parameters
     ----------
@@ -114,7 +121,7 @@ def plot(x_name, y_name, output_filename = "output.txt", fig = None, ax = None):
         name of the output file (e.g. 'output.txt')
         the output file must be in the sciantix.py directory or
         the path must de defined by sciantix.working_dir(path)
-    x_name : 
+    x_name :
         name of the sciantix variable
     y_name :
         name of the sciantix variable
@@ -131,91 +138,77 @@ def plot(x_name, y_name, output_filename = "output.txt", fig = None, ax = None):
     # Reading the output file and saving into data variable
     data = import_data(output_filename)
 
-    #print("data in plot function : ", data)
-
     x = data[1:,findSciantixVariablePosition(data, x_name)].astype(float)
     y = data[1:,findSciantixVariablePosition(data, y_name)].astype(float)
 
-    print("x : ", x)
-    print("y : ", y)
-
-    if fig == None and ax == None:
+    if ax == None:
         fig, ax = plt.subplots()
+    else:
+        ax.clear()
 
     ax.plot(x, y, color = 'blue', label=y_name)
 
-    # ax.set_title(y_name)
     ax.set_xlabel(x_name)
     ax.set_ylabel(y_name)
-    # ax.legend()
 
-    plt.show()
-
-    return fig, ax
+    # No need to return anything as changes are made directly to the ax
 
 
 
 def sciantix_v2(file):
+    global canvas  # Indicate that we're using the global canvas variable
 
-    """ WELCOME """
-    print(f"This file (sciantix.py) is a python module made to handle the sciantix (standalone) postprocessing, and plot the quantities in the output.txt file.")
-    print(f"Type help(sciantix) to get useful information.")
+    output_filename = file
+    output_tags = getDictionary(output_filename)
 
-    """
+    root = tk.Tk()
 
-    print(os.getcwd())
+    def plot_graph():
+        if not listbox_x.curselection() or not listbox_y.curselection():
+            messagebox.showwarning("Selection error", "Please select an item from both lists.")
+            return
+        x_index = listbox_x.curselection()[0]
+        y_index = listbox_y.curselection()[0]
+        x_name = output_tags[x_index]
+        y_name = output_tags[y_index]
 
-    # Construct the full path to the subfolder
-    subfolder_path = os.path.join(os.getcwd(), 'output_folder')
+        # Here, create the fig and ax when you're about to plot
+        fig, ax = plt.subplots(figsize=(5, 5))
+        plot(x_name, y_name, output_filename, ax)
 
-    # Change the current working directory to the subfolder
-    os.chdir(subfolder_path)
+        global canvas  # Indicate that we're using the global canvas variable
+        if canvas:
+            # If a canvas already exists, remove it
+            canvas.get_tk_widget().pack_forget()
+        canvas = FigureCanvasTkAgg(fig, master=root)  # Create a new canvas with the new figure
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
-    wpath = os.getcwd()
+    listbox_x = tk.Listbox(root, exportselection=0, width=50)
+    listbox_x.pack(side="left")
 
-    print("current folder before getDictionary : ",os.getcwd())
+    listbox_y = tk.Listbox(root, exportselection=0, width=50)
+    listbox_y.pack(side="right")
 
-    # Get list of all files and directories in wpath
-    files_and_dirs = os.listdir(wpath)
+    for tag in output_tags:
+        listbox_x.insert(tk.END, tag)
+        listbox_y.insert(tk.END, tag)
 
-    # Sort them by filename
-    sorted_files_and_dirs = sorted(files_and_dirs)
+    button = tk.Button(root, text="Plot graph", command=plot_graph)
+    button.pack()
 
-    # Iterate over sorted list
-    for file in sorted_files_and_dirs:
-        if "output.txt" in file :
-            print("current file : ", file)
-            getDictionary(file)
+    root.mainloop()
 
-
-
-
-
-
-
-
-
-
-    os.chdir('..')"""
-    print(os.getcwd())
-    print("dictionnary of", file, " : \n")
-    output_tags = getDictionary(file)
-    print("output_tags : ", output_tags)
-
-    #plot(output_tags[0], output_tags[2], file)
-    for tag in output_tags :
-        print("current output : ", tag)
-        plot(output_tags[0], tag, file)
 
 
 
 
 def main():
-    sciantix_v2()
+    # Check if 'output.txt' exists in the current directory
+    if 'output.txt' in os.listdir(os.getcwd()):
+        sciantix_v2('output.txt')
+    else:
+        print('No file named "output.txt" found in the current directory')
 
-
-
-
-# If the script is being run as the main program, call the 'main' function.
 if __name__ == "__main__":
     main()
