@@ -133,10 +133,12 @@ def main():
             print("\tMODE GOLD == 3: do not use SCIANTIX, existing results will be saved as gold results.\n ")
 
             # Take the user's input for the gold mode.
-            mode_gold = int(input("Enter MODE GOLD (0, 1, 2, 3)= "))
+            #mode_gold = int(input("Enter MODE GOLD (0, 1, 2, 3)= "))
+            mode_gold = 2
 
             # Ask the user to choose an option for the plot mode.
-            mode_plot = int(input("Enter MODE PLOT (0 or 1)= "))
+            #mode_plot = int(input("Enter MODE PLOT (0 or 1)= "))
+            mode_plot = 0
 
             # For each execution mode (Baker, White, Talip, Contact, Oxidation), run the corresponding regression test function and update the test list and test counts accordingly.
             folderListB, number_of_tests_b, number_of_tests_failed_b = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
@@ -219,7 +221,7 @@ def main():
 
 
 
-
+    
 
 
 
