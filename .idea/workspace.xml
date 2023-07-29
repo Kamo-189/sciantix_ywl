@@ -20,9 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b447f62b-78b5-4606-a50e-6fdf21648ed2" name="Changes" comment="dai">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/regression_test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/regression_test.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utilities/postProcessing/sciantix_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilities/postProcessing/sciantix_v2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utilities/postProcessing/sciantix_v3.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilities/postProcessing/sciantix_v3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InputReading.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/InputReading.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SetVariables.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/SetVariables.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utilities/inputExample/print_input_scaling_factors.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilities/inputExample/print_input_scaling_factors.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +98,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/charlesvalot/Desktop/POLIMI/sciantix_ywl/bin&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/charlesvalot/Desktop/POLIMI/sciantix_ywl/regression&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -107,11 +109,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/bin" />
-      <recent name="$PROJECT_DIR$/utilities/postProcessing" />
-      <recent name="$PROJECT_DIR$/yml tests" />
-      <recent name="$PROJECT_DIR$/.github/workflows" />
       <recent name="$PROJECT_DIR$/regression" />
+      <recent name="$PROJECT_DIR$/regression/test_Baker1977__1273K" />
+      <recent name="$PROJECT_DIR$/bin" />
+      <recent name="$PROJECT_DIR$/bin/temporary" />
+      <recent name="$PROJECT_DIR$/utilities/postProcessing" />
     </key>
   </component>
   <component name="RunManager" selected="Makefile Application.all">
@@ -172,12 +174,23 @@
       <workItem from="1687767071790" duration="13320000" />
       <workItem from="1687855564636" duration="9366000" />
       <workItem from="1687944871918" duration="2046000" />
-      <workItem from="1688024201119" duration="15347000" />
+      <workItem from="1688024201119" duration="17094000" />
+      <workItem from="1688371364707" duration="9889000" />
+      <workItem from="1688559219192" duration="30023000" />
+      <workItem from="1689061542619" duration="17488000" />
+      <workItem from="1689234009277" duration="18611000" />
+      <workItem from="1689869609567" duration="48714000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VCPKGProject">
+    <isAutomaticEditVcpkgJson value="false" />
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticFoundErrors value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="dai" />

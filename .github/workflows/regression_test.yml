@@ -5,6 +5,7 @@ on:
     branches:
       - YML-Pipeline
       - YML-Pipeline-Fresh
+      - Sensitivity
   pull_request:
 
 jobs:
