@@ -22,6 +22,10 @@
     <list default="true" id="b447f62b-78b5-4606-a50e-6fdf21648ed2" name="Changes" comment="dai">
       <change beforePath="$PROJECT_DIR$/.github/workflows/regression_test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/regression_test.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regression/regression_baker_individual.py" beforeDir="false" afterPath="$PROJECT_DIR$/regression/regression_baker_individual.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regression/scaling_factors.py" beforeDir="false" afterPath="$PROJECT_DIR$/regression/scaling_factors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regression/test_Baker1977__1273K/input_scaling_factors.txt" beforeDir="false" afterPath="$PROJECT_DIR$/regression/test_Baker1977__1273K/input_scaling_factors.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/regression/test_Baker1977__1273K/k_each.txt" beforeDir="false" afterPath="$PROJECT_DIR$/regression/test_Baker1977__1273K/k_each.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +180,7 @@
       <workItem from="1688559219192" duration="30023000" />
       <workItem from="1689061542619" duration="17488000" />
       <workItem from="1689234009277" duration="18611000" />
-      <workItem from="1689869609567" duration="48879000" />
+      <workItem from="1689869609567" duration="51164000" />
     </task>
     <servers />
   </component>

@@ -1,20 +1,20 @@
 1
 # scaling factor - resolution_rate
-1
+0.9654477040354977
 # scaling factor - trapping_rate
-1
+1.0
 # scaling factor - nucleation_rate
-1
+1.0
 # scaling factor - diffusivity
-1
+1.0
 # scaling factor - temperature
-1
+1.0
 # scaling factor - fission_rate
-1
+1.0
 # scaling factor - screw_parameter
-1
+1.0
 # scaling factor - span_parameter
-1
+1.0
 # scaling factor - cent_parameter
 1.0
 # scaling factor - helium_production_rate

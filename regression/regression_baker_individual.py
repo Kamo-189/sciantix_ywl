@@ -90,14 +90,14 @@ def check_output(file, l):
   return data, data_gold
 
 # Execute sciantix in the current test folder
-def do_sciantix():
+def do_sciantix(parameter_value):
   # copying input files from the regression folder into the current folder
   #shutil.copy("../input_settings.txt", os.getcwd())
 
 
   shutil.copy("../input_scaling_factors.txt", os.getcwd())
 
-  l = scaling_factors()
+  l = scaling_factors_individual(parameter_value)
   #remove_scaling_factor_files()
 
   # copying and executing sciantix.exe into cwd
@@ -105,27 +105,23 @@ def do_sciantix():
 
   continu = 1
 
-  x = 0
-  for i in range(10):
-    for j in range(5):
+  x, i2, j2 = 0, 0, 0
 
-      if i ==0 and j == 0:
-        lookup_table[x] = (x,i,j)
-        extract_scaling_factors(-1,-1)
-        os.system("./sciantix.x")
-        retrieve_output(x)
-        x += 1
+  lookup_table[x] = (x,i2,j2)
+  extract_scaling_factors(-1,-1)
+  os.system("./sciantix.x")
+  retrieve_output(x)
+  x += 1
 
-        lookup_table[x] = (x,i+1,j+1)
-        extract_scaling_factors(i,j)
+  i = parameter_value
+  for j in range(5):
 
-      else:
-        lookup_table[x] = (x,i+1,j+1)
-        extract_scaling_factors(i,j)
-
+      lookup_table[x] = (x,i+1,j+1)
+      extract_scaling_factors(i,j)
       os.system("./sciantix.x")
       retrieve_output(x)
       x += 1
+
 
   print(lookup_table)
 
@@ -277,18 +273,28 @@ def regression_baker_individual(wpath, mode_Baker, mode_gold, mode_plot, folderL
         os.remove("k_each.txt")
 
 
+    print("resolution_rate : 1")
+    print("trapping_rate : 2")
+    print("nucleation_rate : 3")
+    print("diffusivity : 4")
+    print("temperature : 5")
+    print("fission_rate : 6")
+
+    parameter_value = int(input("Please choose a parameter to work on : (1, 2, 3, 4, 5, 6"))
+
+
     # mode_gold = 0 : Use SCIANTIX / Don't use GOLD and check result
     if mode_gold == 0:
 
-        l, lookup_table = do_sciantix()
-        data, data_gold = check_output(file, l)
+        l, lookup_table = do_sciantix(parameter_value)
+        data, data_gold = check_output(folderList[user_choice], l)
         number_of_tests_failed = check_result(number_of_tests_failed)
 
     # mode_gold = 1 : Use SCIANTIX / Use GOLD
     if mode_gold == 1:
 
-        l, x = do_sciantix()
-        data, data_gold = check_output(file, l)
+        l, x = do_sciantix(parameter_value)
+        data, data_gold = check_output(folderList[user_choice], l)
         # Need to change the gold because now we have many different output
         print("...golding results.")
         do_gold()
@@ -296,13 +302,13 @@ def regression_baker_individual(wpath, mode_Baker, mode_gold, mode_plot, folderL
     # mode_gold = 2 : Don't use SCIANTIX / Don't use GOLD and check result
     if mode_gold == 2:
 
-        data, data_gold = check_output(file)
+        data, data_gold = check_output(folderList[user_choice])
         number_of_tests_failed = check_result(number_of_tests_failed)
 
     # mode_gold = 3 : Don't use SCIANTIX / Use GOLD
     if mode_gold == 3:
 
-        data, data_gold = check_output(file)
+        data, data_gold = check_output(folderList[user_choice])
         print("...golding existing results.")
         do_gold()
 
@@ -311,6 +317,8 @@ def regression_baker_individual(wpath, mode_Baker, mode_gold, mode_plot, folderL
         _,i,j = lookup_table[x]
 
         print("x is : ",x)
+        print("i is : ",i)
+        print("j is : ",j)
 
         FGRPos = [None]*(51)
         intraGranularSwellingPos = [None]*(51)

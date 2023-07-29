@@ -25,6 +25,8 @@ def print_k_each(k_each, scale_value, swelling_value, i):
 
     # Append k_each, scale_value and swelling_value to the corresponding label's list
     k_each_dict[label].append((k_each, scale_value, swelling_value))
+    print("k_each_dict is :",k_each_dict)
+    print("lenght is : ",len(k_each_dict))
 
     # If we have collected 5 k_each values for the label, print them
     if len(k_each_dict[label]) == 5:
@@ -46,6 +48,8 @@ def print_k_each(k_each, scale_value, swelling_value, i):
             row += "\n"
             file.write(row)
             k_each_dict[label] = []  # Clear the list for the next set of values
+
+    print("k_each printed")
 
 
 
@@ -221,6 +225,7 @@ def calcul_k_swelling(data,x,i,j):
 
     # Print the k_each list to the text file with title
     print_k_each(k_each, scale_value, swelling_value , x)
+    print("print_k_each")
 
 
 def remove_scaling_factor_files(file):
