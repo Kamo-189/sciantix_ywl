@@ -38,9 +38,6 @@ number_of_tests_failed = 0
 gold = []
 sample_number = len(igSwelling1)
 
-# Initialize an empty dictionary
-lookup_table = {}
-
 
 """ ------------------- Functions ------------------- """
 
@@ -61,11 +58,9 @@ def check_output(file, l):
   data = [None]*(l-1)
 
   os.chdir('output')
-  for i in lookup_table.keys():
+  for i in range(0,l-1):
     try :
       data[i] = import_data(f"output_{i}.txt")
-      print("data[i] is",data[i])
-      print(f" c'est l'output_{i}.txt")
     except :
       print(f"output.txt not found in {file}")
       data[i] = np.zeros(shape=(1, 1))
@@ -104,30 +99,15 @@ def do_sciantix():
 
   continu = 1
 
-  x = 0
-  for i in range(10):
-    for j in range(5):
+  for i in range(0,l-1):
+    extract_scaling_factors(i)
+    os.system("./sciantix.x")
+    retrieve_output(i)
 
-      if i ==0 and j == 0:
-        lookup_table[x] = (x,i,j)
-        extract_scaling_factors(-1,-1)
-        os.system("./sciantix.x")
-        retrieve_output(x)
-        x += 1
-
-        lookup_table[x] = (x,i+1,j+1)
-        extract_scaling_factors(i,j)
-
-      else:
-        lookup_table[x] = (x,i+1,j+1)
-        extract_scaling_factors(i,j)
-
-      os.system("./sciantix.x")
-      retrieve_output(x)
-      x += 1
-
-  print(lookup_table)
-
+    """print("\t------------------ Are you done ? ------------------")
+    are_done = int(input("\n Yes : 0 or No : 1 \n"))
+    if are_done == 0:
+      sys.exit(1)"""
 
   # copying and executing sciantix.exe into cwd
   #shutil.copy("../sciantix.x", os.getcwd())
@@ -147,7 +127,7 @@ def do_sciantix():
 
   #remove_scaling_factor_files()
 
-  return l,lookup_table
+  return l
 
 # Replace the existing output_gold.txt with the new output.txt
 def do_gold():
@@ -161,78 +141,65 @@ def do_gold():
     print(f"output.txt not found in {file}")
 
 # Plot the regression test results
-def do_plot(l):
+def do_plot(i):
+  # SCIANTIX 1.0 vs. SCIANTIX 2.0
+  fig, ax = plt.subplots()
 
-  for x in lookup_table.keys():
+  ax.scatter(igSwellingBaker, igSwelling1, c = '#FA82B4', edgecolors= '#999AA2', marker = 'o', s=20, label='SCIANTIX 1.0')
+  ax.scatter(igSwellingBaker, igSwelling2[i], c = '#98E18D', edgecolors= '#999AA2', marker = 'o', s=20, label='SCIANTIX 2.0')
 
-      _,i,j = lookup_table[x]
+  ax.plot([1e-3, 1e2],[1e-3, 1e2], '-', color = '#757575')
+  ax.plot([1e-3, 1e2],[2e-3, 2e2],'--', color = '#757575')
+  ax.plot([1e-3, 1e2],[5e-4, 5e1],'--', color = '#757575')
+  ax.set_xlim(1e-2, 1e1)
+  ax.set_ylim(1e-2, 1e1)
 
-      # SCIANTIX 1.0 vs. SCIANTIX 2.0
-      fig, ax = plt.subplots()
+  ax.set_xscale('log')
+  ax.set_yscale('log')
 
-      ax.scatter(igSwellingBaker, igSwelling1, c = 'blue', edgecolors= '#999AA2', marker = 'o', s=20, label='SCIANTIX 1.0')
-      ax.scatter(igSwellingBaker, igSwelling2[x], c = 'yellow', edgecolors= '#999AA2', marker = 'o', s=20, label='SCIANTIX 2.0')
+  # ax.set_title('Intragranular gaseous swelling')
+  ax.set_xlabel('Experimental (%)')
+  ax.set_ylabel('Calculated (%)')
+  ax.legend()
 
-      ax.plot([1e-3, 1e2],[1e-3, 1e2], '-', color = '#757575')
-      ax.plot([1e-3, 1e2],[2e-3, 2e2],'--', color = '#757575')
-      ax.plot([1e-3, 1e2],[5e-4, 5e1],'--', color = '#757575')
-      ax.set_xlim(1e-2, 1e1)
-      ax.set_ylim(1e-2, 1e1)
+  plt.show()
 
-      ax.set_xscale('log')
-      ax.set_yscale('log')
 
-      ax.set_title(f'input_scaling_factors_{i}_{j}')
-      ax.set_xlabel('Experimental (%)')
-      ax.set_ylabel('Calculated (%)')
-      ax.legend()
+  # GOLD vs. SCIANTIX 2.0
+  fig, ax = plt.subplots()
 
-      plt.show()
+  ax.scatter(igSwellingBaker, gold, c = '#C9C954', edgecolors= '#999AA2', marker = 'o', s=20, label='Gold')
+  ax.scatter(igSwellingBaker, igSwelling2[i], c = '#98E18D', edgecolors= '#999AA2', marker = 'o', s=20, label='SCIANTIX 2.0')
 
-  for x in lookup_table.keys():
+  ax.plot([1e-3, 1e2],[1e-3, 1e2], '-', color = '#757575')
+  ax.plot([1e-3, 1e2],[2e-3, 2e2],'--', color = '#757575')
+  ax.plot([1e-3, 1e2],[5e-4, 5e1],'--', color = '#757575')
 
-      _,i,j = lookup_table[x]
+  ax.set_xlim(1e-2, 1e1)
+  ax.set_ylim(1e-2, 1e1)
 
-      # GOLD vs. SCIANTIX 2.0
-      fig, ax = plt.subplots()
+  ax.set_xscale('log')
+  ax.set_yscale('log')
 
-      ax.scatter(igSwellingBaker, gold, c = 'blue', edgecolors= '#999AA2', marker = 'o', s=20, label='Gold')
-      ax.scatter(igSwellingBaker, igSwelling2[x], c = 'yellow', edgecolors= '#999AA2', marker = 'o', s=20, label='SCIANTIX 2.0')
+  # ax.set_title('Intergranular gaseous swelling')
+  ax.set_xlabel('Experimental (%)')
+  ax.set_ylabel('Calculated (%)')
+  ax.legend()
 
-      ax.plot([1e-3, 1e2],[1e-3, 1e2], '-', color = '#757575')
-      ax.plot([1e-3, 1e2],[2e-3, 2e2],'--', color = '#757575')
-      ax.plot([1e-3, 1e2],[5e-4, 5e1],'--', color = '#757575')
+  plt.show()
 
-      ax.set_xlim(1e-2, 1e1)
-      ax.set_ylim(1e-2, 1e1)
+  # Fission gases release plot
+  fig, ax = plt.subplots()
+  ax.scatter(igSwelling2[i], FGR2[i], c = '#98E18D', edgecolors= '#999AA2', marker = 'o', s=20, label='FGR SCIANTIX 2.0')
 
-      ax.set_xscale('log')
-      ax.set_yscale('log')
+  ax.set_xscale('log')
+  ax.set_yscale('log')
 
-      ax.set_title(f'input_scaling_factors_{i}_{j}')
-      ax.set_xlabel('Experimental (%)')
-      ax.set_ylabel('Calculated (%)')
-      ax.legend()
+  ax.set_xlabel('Swelling (%)')
+  ax.set_ylabel('FGR (%)')
+  ax.legend()
 
-      plt.show()
-
-  for x in lookup_table.keys():
-
-      _,i,j = lookup_table[x]
-
-      # Fission gases release plot
-      fig, ax = plt.subplots()
-      ax.scatter(igSwelling2[i], FGR2[x], c = '#98E18D', edgecolors= '#999AA2', marker = 'o', s=20, label='FGR SCIANTIX 2.0')
-
-      ax.set_xscale('log')
-      ax.set_yscale('log')
-
-      ax.set_title(f'input_scaling_factors_{i}_{j}')
-      ax.set_xlabel('Swelling (%)')
-      ax.set_ylabel('FGR (%)')
-      ax.legend()
-
-      plt.show()
+  plt.show()
 
 
 # Main function of the baker regression
@@ -258,21 +225,18 @@ def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number
 
       print(f"Now in folder {file}...")
       number_of_tests += 1
-      if os.path.exists("k_each.txt"):
-        os.remove("k_each.txt")
 
-
-    # mode_gold = 0 : Use SCIANTIX / Don't use GOLD and check result
+      # mode_gold = 0 : Use SCIANTIX / Don't use GOLD and check result
       if mode_gold == 0:
 
-        l, lookup_table = do_sciantix()
+        l = do_sciantix()
         data, data_gold = check_output(file, l)
         number_of_tests_failed = check_result(number_of_tests_failed)
 
       # mode_gold = 1 : Use SCIANTIX / Use GOLD
       if mode_gold == 1:
 
-        l, x = do_sciantix()
+        l = do_sciantix()
         data, data_gold = check_output(file, l)
         # Need to change the gold because now we have many different output
         print("...golding results.")
@@ -291,70 +255,51 @@ def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number
         print("...golding existing results.")
         do_gold()
 
-      for x in lookup_table.keys():
 
-          _,i,j = lookup_table[x]
+      for i in range(0,l-1):
 
-          print("x is : ",x)
+        print("i is : ",i)
+        FGRPos = [None]*(l-1)
+        intraGranularSwellingPos = [None]*(l-1)
 
-          FGRPos = [None]*(51)
-          intraGranularSwellingPos = [None]*(51)
-
-          #FGR2 = [None]*(l-1)
-          #igSwelling2 = [None]*(l-1)
-
-          #print(data[x])
-          # Retrieve the generated data of Fission gas release
-          FGRPos[x] = findSciantixVariablePosition(data[x], "Fission gas release (/)")
-          if x >= len(FGR2):
-            FGR2.append([])  # Append a new list if FGR2 doesn't have a list at position i
-          FGR2_data = 100 * data[x][-1,FGRPos[x]].astype(float)
-          FGR2[x].append(FGR2_data)  # Now it's safe to append to FGR2[i]
+        #FGR2 = [None]*(l-1)
+        #igSwelling2 = [None]*(l-1)
 
 
-          print("FGR2 : ",FGR2[x])
+        # Retrieve the generated data of Fission gas release
+        FGRPos[i] = findSciantixVariablePosition(data[i], "Fission gas release (/)")
+        if i >= len(FGR2):
+          FGR2.append([])  # Append a new list if FGR2 doesn't have a list at position i
+        FGR2[i].append(100 * data[i][-1,FGRPos[i]].astype(float))  # Now it's safe to append to FGR2[i]
 
-          # Retrieve the generated data of Intragranular gas swelling
-          intraGranularSwellingPos[x] = findSciantixVariablePosition(data[x], "Intragranular gas swelling (/)")
-          #print(intraGranularSwellingPos[x])
-          if x >= len(igSwelling2):
-            igSwelling2.append([])
-          igSwelling2_data = 100*data[x][-1,intraGranularSwellingPos[x]].astype(float)
-          igSwelling2[x].append(igSwelling2_data)
 
-          print("igSwelling2 is : ",igSwelling2[x])
-          """
-          print("data_gold is : ", data_gold)
-          print("data[i] is : ", data[i])
-          print("lenght of data_gold : ",len(data_gold))
-          print("lenght of data[i] : ",len(data[i]))
-          print("gold is : ", gold)
-          print("lenght of gold : ",len(gold))
-          print("lenght of igSwelling2 : ",len(igSwelling2[i]))"""
+        print(FGR2[i])
 
-          calcul_k_swelling(data,x,i,j)
-          x += 1
+        # Retrieve the generated data of Intragranular gas swelling
+        intraGranularSwellingPos[i] = findSciantixVariablePosition(data[i], "Intragranular gas swelling (/)")
+        if i >= len(igSwelling2):
+          igSwelling2.append([])
+        igSwelling2[i].append(100*data[i][-1,intraGranularSwellingPos[i]].astype(float))
 
-      plot_one_k_graphs()
-      plot_k_graphs()
-      plot_swelling_graphs()
+        print(igSwelling2[i])
+        """
+        print("data_gold is : ", data_gold)
+        print("data[i] is : ", data[i])
+        print("lenght of data_gold : ",len(data_gold))
+        print("lenght of data[i] : ",len(data[i]))
+        print("gold is : ", gold)
+        print("lenght of gold : ",len(gold))
+        print("lenght of igSwelling2 : ",len(igSwelling2[i]))"""
 
       # Retrieve the gold data of Intragranular gas swelling
       intraGranularSwellingGoldPos = findSciantixVariablePosition(data_gold, "Intragranular gas swelling (/)")
       gold.append(100*data_gold[-1,intraGranularSwellingGoldPos].astype(float))
-      """
-      print("\t------------------ Are you done ? ------------------")
-      are_done = int(input("\n Yes : 0 or No : 1 \n"))
-      if are_done == 0:
-        sys.exit(1)"""
-
       os.chdir('..')
-      remove_scaling_factor_files(file)
 
 
   # Check if the user has chosen to display the various plots
   if mode_plot == 1:
-    do_plot(l)
+    do_plot(i)
 
   # Experimental data: mean, median, ...
   print(f"Experimental data - mean: ", np.mean(igSwellingBaker))

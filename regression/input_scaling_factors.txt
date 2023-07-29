@@ -7,6 +7,10 @@
 1.0
 # scaling factor - diffusivity
 1.0
+# scaling factor - temperature
+1.0
+# scaling factor - fission rate
+1.0
 # scaling factor - screw parameter
 1.0
 # scaling factor - span parameter

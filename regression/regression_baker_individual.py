@@ -8,7 +8,7 @@ This is a python script to execute the regression (running the validation databa
 
 """ ------------------- Import requiered depedencies ------------------- """
 
-import os
+
 import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
@@ -21,6 +21,7 @@ from scaling_factors import remove_scaling_factor_files
 import scipy.stats as stats
 from sklearn.linear_model import LinearRegression
 import sys
+import os
 
 """ ------------------- Global Variables ------------------- """
 
@@ -236,41 +237,55 @@ def do_plot(l):
 
 
 # Main function of the baker regression
-def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed):
+def regression_baker_individual(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed):
 
-  # Exit of the function without doing anything
-  if mode_Baker == 0 :
-    return folderList, number_of_tests, number_of_tests_failed
+    # Exit of the function without doing anything
+    if mode_Baker == 0 :
+        return folderList, number_of_tests, number_of_tests_failed
 
-  # Get list of all files and directories in wpath
-  files_and_dirs = os.listdir(wpath)
+    print(os.getcwd())
+    print(wpath)
 
-  # Sort them by filename
-  sorted_files_and_dirs = sorted(files_and_dirs)
+    # Get list of all files and directories in wpath
+    files_and_dirs = os.listdir(wpath)
+    print(files_and_dirs)
 
-  # Iterate over sorted list
-  for file in sorted_files_and_dirs:
-    # Verify on a given folder, if Baker is in it's name
-    if "Baker" in file and os.path.isdir(file):
-      folderList.append(file)
-      os.chdir(file)
+    # Sort them by filename
+    sorted_files_and_dirs = sorted(files_and_dirs)
+    print(sorted_files_and_dirs)
+
+    # Iterate over sorted list
+    for file in sorted_files_and_dirs:
+        # Verify on a given folder, if Baker is in it's name
+        if "Baker" in file and os.path.isdir(file):
+            folderList.append(file)
+
+    print(folderList)
+    # Now, print the folder list for the user to choose
+    for i in range(len(folderList)):
+        print(f"Folder {folderList[i]} is : {i}")
+
+    user_choice = int(input("Please choose a folder by entering its number: "))
+
+    os.chdir(folderList[user_choice])
 
 
-      print(f"Now in folder {file}...")
-      number_of_tests += 1
-      if os.path.exists("k_each.txt"):
+
+    print(f"Now in folder {folderList[user_choice]}...")
+    number_of_tests += 1
+    if os.path.exists("k_each.txt"):
         os.remove("k_each.txt")
 
 
     # mode_gold = 0 : Use SCIANTIX / Don't use GOLD and check result
-      if mode_gold == 0:
+    if mode_gold == 0:
 
         l, lookup_table = do_sciantix()
         data, data_gold = check_output(file, l)
         number_of_tests_failed = check_result(number_of_tests_failed)
 
-      # mode_gold = 1 : Use SCIANTIX / Use GOLD
-      if mode_gold == 1:
+    # mode_gold = 1 : Use SCIANTIX / Use GOLD
+    if mode_gold == 1:
 
         l, x = do_sciantix()
         data, data_gold = check_output(file, l)
@@ -278,111 +293,111 @@ def regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number
         print("...golding results.")
         do_gold()
 
-      # mode_gold = 2 : Don't use SCIANTIX / Don't use GOLD and check result
-      if mode_gold == 2:
+    # mode_gold = 2 : Don't use SCIANTIX / Don't use GOLD and check result
+    if mode_gold == 2:
 
         data, data_gold = check_output(file)
         number_of_tests_failed = check_result(number_of_tests_failed)
 
-      # mode_gold = 3 : Don't use SCIANTIX / Use GOLD
-      if mode_gold == 3:
+    # mode_gold = 3 : Don't use SCIANTIX / Use GOLD
+    if mode_gold == 3:
 
         data, data_gold = check_output(file)
         print("...golding existing results.")
         do_gold()
 
-      for x in lookup_table.keys():
+    for x in lookup_table.keys():
 
-          _,i,j = lookup_table[x]
+        _,i,j = lookup_table[x]
 
-          print("x is : ",x)
+        print("x is : ",x)
 
-          FGRPos = [None]*(51)
-          intraGranularSwellingPos = [None]*(51)
+        FGRPos = [None]*(51)
+        intraGranularSwellingPos = [None]*(51)
 
-          #FGR2 = [None]*(l-1)
-          #igSwelling2 = [None]*(l-1)
+        #FGR2 = [None]*(l-1)
+        #igSwelling2 = [None]*(l-1)
 
-          #print(data[x])
-          # Retrieve the generated data of Fission gas release
-          FGRPos[x] = findSciantixVariablePosition(data[x], "Fission gas release (/)")
-          if x >= len(FGR2):
+        #print(data[x])
+        # Retrieve the generated data of Fission gas release
+        FGRPos[x] = findSciantixVariablePosition(data[x], "Fission gas release (/)")
+        if x >= len(FGR2):
             FGR2.append([])  # Append a new list if FGR2 doesn't have a list at position i
-          FGR2_data = 100 * data[x][-1,FGRPos[x]].astype(float)
-          FGR2[x].append(FGR2_data)  # Now it's safe to append to FGR2[i]
+        FGR2_data = 100 * data[x][-1,FGRPos[x]].astype(float)
+        FGR2[x].append(FGR2_data)  # Now it's safe to append to FGR2[i]
 
 
-          print("FGR2 : ",FGR2[x])
+        print("FGR2 : ",FGR2[x])
 
-          # Retrieve the generated data of Intragranular gas swelling
-          intraGranularSwellingPos[x] = findSciantixVariablePosition(data[x], "Intragranular gas swelling (/)")
-          #print(intraGranularSwellingPos[x])
-          if x >= len(igSwelling2):
+        # Retrieve the generated data of Intragranular gas swelling
+        intraGranularSwellingPos[x] = findSciantixVariablePosition(data[x], "Intragranular gas swelling (/)")
+        #print(intraGranularSwellingPos[x])
+        if x >= len(igSwelling2):
             igSwelling2.append([])
-          igSwelling2_data = 100*data[x][-1,intraGranularSwellingPos[x]].astype(float)
-          igSwelling2[x].append(igSwelling2_data)
+        igSwelling2_data = 100*data[x][-1,intraGranularSwellingPos[x]].astype(float)
+        igSwelling2[x].append(igSwelling2_data)
 
-          print("igSwelling2 is : ",igSwelling2[x])
-          """
-          print("data_gold is : ", data_gold)
-          print("data[i] is : ", data[i])
-          print("lenght of data_gold : ",len(data_gold))
-          print("lenght of data[i] : ",len(data[i]))
-          print("gold is : ", gold)
-          print("lenght of gold : ",len(gold))
-          print("lenght of igSwelling2 : ",len(igSwelling2[i]))"""
+        print("igSwelling2 is : ",igSwelling2[x])
+        """
+        print("data_gold is : ", data_gold)
+        print("data[i] is : ", data[i])
+        print("lenght of data_gold : ",len(data_gold))
+        print("lenght of data[i] : ",len(data[i]))
+        print("gold is : ", gold)
+        print("lenght of gold : ",len(gold))
+        print("lenght of igSwelling2 : ",len(igSwelling2[i]))"""
 
-          calcul_k_swelling(data,x,i,j)
-          x += 1
+        calcul_k_swelling(data,x,i,j)
+        x += 1
 
-      plot_one_k_graphs()
-      plot_k_graphs()
-      plot_swelling_graphs()
+    plot_one_k_graphs()
+    plot_k_graphs()
+    plot_swelling_graphs()
 
-      # Retrieve the gold data of Intragranular gas swelling
-      intraGranularSwellingGoldPos = findSciantixVariablePosition(data_gold, "Intragranular gas swelling (/)")
-      gold.append(100*data_gold[-1,intraGranularSwellingGoldPos].astype(float))
-      """
-      print("\t------------------ Are you done ? ------------------")
-      are_done = int(input("\n Yes : 0 or No : 1 \n"))
-      if are_done == 0:
-        sys.exit(1)"""
+    # Retrieve the gold data of Intragranular gas swelling
+    intraGranularSwellingGoldPos = findSciantixVariablePosition(data_gold, "Intragranular gas swelling (/)")
+    gold.append(100*data_gold[-1,intraGranularSwellingGoldPos].astype(float))
+    """
+    print("\t------------------ Are you done ? ------------------")
+    are_done = int(input("\n Yes : 0 or No : 1 \n"))
+    if are_done == 0:
+      sys.exit(1)"""
 
-      os.chdir('..')
-      remove_scaling_factor_files(file)
+    os.chdir('..')
+    remove_scaling_factor_files(folderList[user_choice])
 
 
-  # Check if the user has chosen to display the various plots
-  if mode_plot == 1:
-    do_plot(l)
+    # Check if the user has chosen to display the various plots
+    if mode_plot == 1:
+        do_plot(l)
 
-  # Experimental data: mean, median, ...
-  print(f"Experimental data - mean: ", np.mean(igSwellingBaker))
-  print(f"Experimental data - median: ", np.median(igSwellingBaker))
-  print(f"Experimental data - Q1: ", np.percentile(igSwellingBaker, 25, interpolation = 'midpoint'))
-  print(f"Experimental data - Q3: ", np.percentile(igSwellingBaker, 75, interpolation = 'midpoint'))
+    # Experimental data: mean, median, ...
+    print(f"Experimental data - mean: ", np.mean(igSwellingBaker))
+    print(f"Experimental data - median: ", np.median(igSwellingBaker))
+    print(f"Experimental data - Q1: ", np.percentile(igSwellingBaker, 25, interpolation = 'midpoint'))
+    print(f"Experimental data - Q3: ", np.percentile(igSwellingBaker, 75, interpolation = 'midpoint'))
 
-  # SCIANTIX 1.0: mean, median, ...
-  print(f"SCIANTIX 1.0 - mean: ", np.mean(igSwelling1))
-  print(f"SCIANTIX 1.0 - median: ", np.median(igSwelling1))
-  print(f"SCIANTIX 1.0 - Q1: ", np.percentile(igSwelling1, 25, interpolation = 'midpoint'))
-  print(f"SCIANTIX 1.0 - Q3: ", np.percentile(igSwelling1, 75, interpolation = 'midpoint'))
+    # SCIANTIX 1.0: mean, median, ...
+    print(f"SCIANTIX 1.0 - mean: ", np.mean(igSwelling1))
+    print(f"SCIANTIX 1.0 - median: ", np.median(igSwelling1))
+    print(f"SCIANTIX 1.0 - Q1: ", np.percentile(igSwelling1, 25, interpolation = 'midpoint'))
+    print(f"SCIANTIX 1.0 - Q3: ", np.percentile(igSwelling1, 75, interpolation = 'midpoint'))
 
-  # SCIANTIX 2.0: mean and median, ...
-  print(f"SCIANTIX 2.0 - mean: ", np.mean(igSwelling2))
-  print(f"SCIANTIX 2.0 - median: ", np.median(igSwelling2))
-  print(f"SCIANTIX 2.0 - median: ", np.percentile(igSwelling2, 25, interpolation = 'midpoint'))
-  print(f"SCIANTIX 2.0 - median: ", np.percentile(igSwelling2, 75, interpolation = 'midpoint'))
+    # SCIANTIX 2.0: mean and median, ...
+    print(f"SCIANTIX 2.0 - mean: ", np.mean(igSwelling2))
+    print(f"SCIANTIX 2.0 - median: ", np.median(igSwelling2))
+    print(f"SCIANTIX 2.0 - median: ", np.percentile(igSwelling2, 25, interpolation = 'midpoint'))
+    print(f"SCIANTIX 2.0 - median: ", np.percentile(igSwelling2, 75, interpolation = 'midpoint'))
 
-  # SCIANTIX 1.0 and 2.0 - Median absolute deviatiosns
-  deviations_1 = abs(np.array(igSwellingBaker) - igSwelling1)
-  deviations_2 = abs(np.array(igSwellingBaker) - igSwelling2)
-  print(f"SCIANTIX 1.0 - MAD: ", np.median(deviations_1))
-  print(f"SCIANTIX 2.0 - MAD: ", np.median(deviations_2))
+    # SCIANTIX 1.0 and 2.0 - Median absolute deviatiosns
+    deviations_1 = abs(np.array(igSwellingBaker) - igSwelling1)
+    deviations_2 = abs(np.array(igSwellingBaker) - igSwelling2)
+    print(f"SCIANTIX 1.0 - MAD: ", np.median(deviations_1))
+    print(f"SCIANTIX 2.0 - MAD: ", np.median(deviations_2))
 
-  # RMSE
-  print(f"SCIANTIX 1.0 - RMSE: ", np.mean(np.array(igSwellingBaker) - igSwelling1)**2)
-  print(f"SCIANTIX 2.0 - RMSE: ", np.mean(np.array(igSwellingBaker) - igSwelling2)**2)
-  print("\n")
+    # RMSE
+    print(f"SCIANTIX 1.0 - RMSE: ", np.mean(np.array(igSwellingBaker) - igSwelling1)**2)
+    print(f"SCIANTIX 2.0 - RMSE: ", np.mean(np.array(igSwellingBaker) - igSwelling2)**2)
+    print("\n")
 
-  return folderList, number_of_tests, number_of_tests_failed
+    return folderList, number_of_tests, number_of_tests_failed

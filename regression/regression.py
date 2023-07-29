@@ -14,11 +14,13 @@ import matplotlib.pyplot as plt
 import shutil
 
 from regression_baker import regression_baker
+from regression_baker_individual import regression_baker_individual
 from regression_white import regression_white
 from regression_talip import regression_talip
 from regression_contact import regression_contact
 from regression_oxidation import regression_oxidation
 from call_postProcessing import call_postProcessing
+from scaling_factors import *
 
 
 # The function `remove_output` is used to remove an existing output file (output.txt) from a specified folder
@@ -33,11 +35,14 @@ def remove_output(file):
     os.chdir('..') # Change working directory back to the parent directory
 
 " ------------------- Main part -------------------"
-def main():
+def regression():
 
 
     # Copy the file 'sciantix.x' from the parent directory's 'bin' folder to the current directory
     shutil.copy("../bin/sciantix.x", os.getcwd())
+
+    #scaling_factors()
+
 
     # Stock the directory path of the current file
     wpath = os.path.dirname(os.path.realpath(__file__))
@@ -95,14 +100,24 @@ def main():
         print("\tExecution option == 0 USE DEFAULT MODES")
         print("\tExecution option == 1 PERSONALISED MODES")
         print("\tExecution option == 2 REMOVE ALL OUTPUT FILES")
+        print("\tExecution option == 3 CALCUL QUALITY VALUE")
+
         execution_option = int(input("\nEnter Execution option (0, 1, 2) = ")) # Take the user's input for the execution option.
 
         # If execution_option is set to '2', this means the user wants to remove all output files.
         if execution_option == 2 :
-            # For each file in the working directory, if the file is a directory and its name contains 'Baker', 'White', 'Talip', 'CONTACT', or 'oxidation', then run the 'remove_output' function on that file.
-            for file in os.listdir(wpath):
+
+            # Get list of all files and directories in wpath
+            files_and_dirs = os.listdir(wpath)
+
+            # Sort them by filename
+            sorted_files_and_dirs = sorted(files_and_dirs)
+
+            # Iterate over sorted list
+            for file in sorted_files_and_dirs:
                 if "Baker" in file and os.path.isdir(file) is True:
                     remove_output(file)
+                    remove_scaling_factor_files(file)
                 if "White" in file and os.path.isdir(file) is True:
                     remove_output(file)
                 if "Talip" in file and os.path.isdir(file) is True:
@@ -133,8 +148,8 @@ def main():
             print("\tMODE GOLD == 3: do not use SCIANTIX, existing results will be saved as gold results.\n ")
 
             # Take the user's input for the gold mode.
-            #mode_gold = int(input("Enter MODE GOLD (0, 1, 2, 3)= "))
-            mode_gold = 2
+            mode_gold = int(input("Enter MODE GOLD (0, 1, 2, 3)= "))
+            #mode_gold = 2
 
             # Ask the user to choose an option for the plot mode.
             #mode_plot = int(input("Enter MODE PLOT (0 or 1)= "))
@@ -199,6 +214,50 @@ def main():
                 folderList, number_of_tests, number_of_tests_failed = regression_oxidation(wpath, mode_oxidation, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
                 print("\nRegression selected : Oxidation")
 
+        if execution_option == 3 :
+            print("\tOption == 0 RUN ON EVERY BAKER TEST")
+            print("\tOption == 1 PERSONALISED BAKER")
+            baker_option = int(input("\nEnter Execution option (0, 1) = "))
+
+            if baker_option == 0:
+
+                # Ask the user to choose an option for the gold mode.
+                print("Pleast select one option for the GOLD MODE :\n")
+                print("\tMODE GOLD == 0: use SCIANTIX, check new results.\n")
+                print("\tMODE GOLD == 1: use SCIANTIX, new results will be saved as gold results.\n ")
+                print("\tMODE GOLD == 2: do not use SCIANTIX, check existing results.\n ")
+                print("\tMODE GOLD == 3: do not use SCIANTIX, existing results will be saved as gold results.\n ")
+
+                # Take the user's input for the gold mode.
+                mode_gold = int(input("Enter MODE GOLD (0, 1, 2, 3)= "))
+
+                # Ask the user to choose an option for the plot mode.
+                mode_plot = int(input("Enter MODE PLOT (0 or 1)= "))
+
+                mode_Baker = 1
+
+                folderList, number_of_tests, number_of_tests_failed = regression_baker(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+
+            if baker_option == 1:
+
+                # Ask the user to choose an option for the gold mode.
+                print("Pleast select one option for the GOLD MODE :\n")
+                print("\tMODE GOLD == 0: use SCIANTIX, check new results.\n")
+                print("\tMODE GOLD == 1: use SCIANTIX, new results will be saved as gold results.\n ")
+                print("\tMODE GOLD == 2: do not use SCIANTIX, check existing results.\n ")
+                print("\tMODE GOLD == 3: do not use SCIANTIX, existing results will be saved as gold results.\n ")
+
+                # Take the user's input for the gold mode.
+                mode_gold = int(input("Enter MODE GOLD (0, 1, 2, 3)= "))
+
+                # Ask the user to choose an option for the plot mode.
+                mode_plot = int(input("Enter MODE PLOT (0 or 1)= "))
+
+                mode_Baker = 1
+
+                folderList, number_of_tests, number_of_tests_failed = regression_baker_individual(wpath, mode_Baker, mode_gold, mode_plot, folderList, number_of_tests, number_of_tests_failed)
+
+
 
     print("MODE GOLD ==", mode_gold, "selected.")
     print("MODE PLOT ==", mode_plot, "selected.\n")
@@ -210,19 +269,9 @@ def main():
     print("! Number of tests failed = ", number_of_tests_failed, "\n")
 
 
-
-
-
-
-
     if os.environ.get('GITHUB_ACTIONS') != 'true':
         if execution_option == 0 :
             call_postProcessing(wpath)
-
-
-
-    
-
 
 
     # If the test condition is set to one, run the verification
@@ -232,6 +281,19 @@ def main():
             print("-----------------ONE OR MORE TESTS HAVE FAILED-----------------")
             sys.exit(1)
 
+
+
+def main():
+    regression()
+    #scaling_factors()
+
+
 # If the script is being run as the main program, call the 'main' function.
 if __name__ == "__main__":
     main()
+
+"""
+It didn't change anything but I managed to isolate the problem even more, the length of data_gold and the length of a specific data[i] is the same :
+
+length of data_gold :  102
+length of data[i] :  102"""

@@ -153,5 +153,3 @@ def call_postProcessing(wpath):
     are_done = int(input("\n Yes : 0 or No : 1 \n"))
     if are_done == 0:
         shutil.rmtree("output_folder")
-
-
