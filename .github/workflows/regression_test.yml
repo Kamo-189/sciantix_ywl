@@ -69,7 +69,7 @@ jobs:
           pip install virtualenv
           virtualenv venv
           source venv/bin/activate
-          pip install numpy matplotlib scipy scikit-learn
+          pip install numpy matplotlib pandas scipy scikit-learn
 
       - name: Run tests
         run: |
